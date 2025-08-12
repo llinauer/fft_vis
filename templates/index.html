@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>FFT Image Editor</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <header>
+        <h1>FFT Image Editor</h1>
+    </header>
+
+    <main>
+        <section class="upload-section">
+            <form id="uploadForm" enctype="multipart/form-data">
+                <input type="file" name="file" accept="image/*" required>
+                <button type="submit">Upload Image</button>
+            </form>
+        </section>
+
+        <section class="controls">
+            <label>Shape:
+                <select id="shape">
+                    <option value="rect">Filled Rectangle</option>
+                    <option value="hollow_rect">Hollow Rectangle</option>
+                    <option value="circle">Filled Circle</option>
+                    <option value="ring">Ring</option>
+                </select>
+            </label>
+
+            <label>Thickness:
+                <input type="range" id="thickness" min="1" max="50" value="5">
+                <span id="thicknessValue">5</span> px
+            </label>
+
+            <button id="applyBtn">Apply Shape</button>
+            <button id="resetMask">Reset Mask</button>
+            <!-- Upload New Image button removed as requested -->
+        </section>
+
+        <section class="canvas-section">
+            <div class="image-container">
+                <h3>Original Image</h3>
+                <img id="originalImage" alt="Original">
+            </div>
+            <div class="image-container">
+                <h3>FFT Power Spectrum</h3>
+                <canvas id="fftCanvas"></canvas>
+            </div>
+            <div class="image-container">
+                <h3>IFFT Result</h3>
+                <img id="ifftImage" alt="IFFT Result">
+            </div>
+        </section>
+    </main>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
+

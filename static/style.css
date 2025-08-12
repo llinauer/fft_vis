@@ -1,0 +1,80 @@
+body {
+    font-family: Arial, sans-serif;
+    background: #f5f6fa;
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    background: #273c75;
+    color: white;
+    padding: 1em;
+    text-align: center;
+}
+
+main {
+    padding: 1em;
+    max-width: 1200px;
+    margin: auto;
+}
+
+.upload-section {
+    background: white;
+    padding: 1em;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    margin-bottom: 1em;
+}
+
+.controls {
+    background: white;
+    padding: 1em;
+    display: flex;
+    align-items: center;
+    gap: 1em;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    margin-bottom: 1em;
+}
+
+.controls label {
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
+}
+
+.controls button {
+    padding: 0.5em 1em;
+    border: none;
+    background: #44bd32;
+    color: white;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.controls button:hover {
+    background: #4cd137;
+}
+
+.canvas-section {
+    display: flex;
+    gap: 1em;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.image-container {
+    background: white;
+    padding: 0.5em;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    text-align: center;
+}
+
+.image-container img,
+#fftCanvas {
+    max-width: 350px;
+    height: auto;
+    border: 1px solid #ccc;
+}
+
