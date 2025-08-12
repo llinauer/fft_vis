@@ -78,19 +78,30 @@ fftCanvas.addEventListener('mouseup', () => {
     hasSelection = true;
 });
 
-// draw preview using internal canvas coords (matches what we send)
 function drawPreviewShape(x, y) {
     const ctx = fftCanvas.getContext('2d');
     ctx.clearRect(0, 0, fftCanvas.width, fftCanvas.height);
-    if (baseFFTImage) ctx.drawImage(baseFFTImage, 0, 0, fftCanvas.width, fftCanvas.height);
-
-    ctx.strokeStyle = 'red';
-    ctx.lineWidth = (shapeSelect.value.includes('hollow') || shapeSelect.value === 'ring') ? thickness : 2;
-    ctx.fillStyle = 'rgba(255,0,0,0.3)';
-    ctx.setLineDash([6,4]);
+    ctx.drawImage(baseFFTImage, 0, 0);
 
     const w = x - startX;
     const h = y - startY;
+
+    // Convert FFT thickness to preview thickness
+    const scaleX = fftCanvas.width / baseFFTImage.width;
+    const scaleY = fftCanvas.height / baseFFTImage.height;
+    const previewThicknessX = Math.max(1, thickness * scaleX);
+    const previewThicknessY = Math.max(1, thickness * scaleY);
+
+    ctx.strokeStyle = 'red';
+    ctx.lineWidth = (shapeSelect.value.includes('hollow') || shapeSelect.value === 'ring')
+        ? Math.max(previewThicknessX, previewThicknessY)
+        : 2;
+    ctx.fillStyle = 'rgba(255,0,0,0.3)';
+
+    const centerX = startX + w / 2;
+    const centerY = startY + h / 2;
+    const radiusX = Math.abs(w / 2);
+    const radiusY = Math.abs(h / 2);
 
     switch (shapeSelect.value) {
         case 'rect':
@@ -101,16 +112,29 @@ function drawPreviewShape(x, y) {
             break;
         case 'circle':
             ctx.beginPath();
-            ctx.ellipse(startX + w / 2, startY + h / 2, Math.abs(w / 2), Math.abs(h / 2), 0, 0, Math.PI * 2);
+            ctx.ellipse(centerX, centerY, radiusX, radiusY, 0, 0, Math.PI * 2);
             ctx.fill();
             break;
         case 'ring':
+            // Outer ellipse path
             ctx.beginPath();
-            ctx.ellipse(startX + w / 2, startY + h / 2, Math.abs(w / 2), Math.abs(h / 2), 0, 0, Math.PI * 2);
-            ctx.stroke();
+            ctx.ellipse(centerX, centerY, radiusX, radiusY, 0, 0, Math.PI * 2);
+
+            // Inner ellipse path (subtract thickness)
+            ctx.moveTo(centerX + radiusX - previewThicknessX, centerY);
+            ctx.ellipse(centerX, centerY,
+                        Math.max(0, radiusX - previewThicknessX),
+                        Math.max(0, radiusY - previewThicknessY),
+                        0, 0, Math.PI * 2, true);
+
+            ctx.closePath();
+            ctx.fill();
             break;
     }
 }
+
+
+
 
 function applyShape(x0, y0, x1, y1) {
     if (!currentImageId || !baseFFTImage) return;
